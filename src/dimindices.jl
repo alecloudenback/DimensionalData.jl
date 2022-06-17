@@ -9,9 +9,9 @@ Base.axes(di::AbstractDimIndices) = map(d -> axes(d, 1), dims(di))
 for f in (:getindex, :view, :dotview)
     @eval begin
         @propagate_inbounds Base.$f(A::AbstractDimIndices, i1::Selector, I::Selector...) =
-            Base.$f(A, dims2indices(A, i1, I)...)
+            Base.$f(A, dims2indices(A, (i1, I))...)
         @propagate_inbounds function Base.$f(A::AbstractDimIndices, i1::Dimension, I::Dimension...; kw...)
-            Base.$f(A, dims2indices(A, i1, I..., kwdims(values(kw))...)...)
+            Base.$f(A, dims2indices(A, (i1, I..., kwdims(values(kw))...))...)
         end
     end
 end
